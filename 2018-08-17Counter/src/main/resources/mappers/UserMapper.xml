@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mappers.UserMapper" >
+
+    <insert id="addUser" keyProperty="id" useGeneratedKeys="true" parameterType="com.entity.User" >
+        INSERT INTO USER(username) VALUES (#{username})
+    </insert>
+
+    <update id="updateUser" parameterType="com.entity.User">
+        UPDATE USER SET username=#{username} where id=#{id}
+    </update>
+    <delete id="deleteUser" parameterType="int">
+        DELETE FROM USER WHERE id=#{id}
+    </delete>
+    <select id="queryAll" parameterType="string" resultType="com.entity.User">
+       select * from USER
+   </select>
+    <select id="findByid" resultType="com.entity.User">
+        SELECT * from USER where id=#{id}
+    </select>
+
+    <select id="findByname" parameterType="string" resultType="com.entity.User" >
+        SELECT * FROM USER WHERE username=#{username}
+    </select>
+
+    <select id="getRole" parameterType="int" resultType="string">
+        SELECT  role from USER where id=#{id}
+    </select>
+</mapper>

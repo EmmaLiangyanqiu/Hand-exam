@@ -1,0 +1,104 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <!--不需要拦截的登陆页面-->
+    <security:http security="none" pattern="/test"/>
+    <security:http security="none" pattern="/login.jsp"/>
+    <security:http security="none" pattern="/failure.jsp"/>
+    <security:http security="none" pattern="/static/**" />
+
+  <!--  <security:http auto-config="true">
+        <security:form-login login-page="/login.jsp" login-processing-url="/login.do"
+                             username-parameter="username" password-parameter="password"
+                              authentication-success-handler-ref="authSuccess"
+                              authentication-failure-url="/failure.jsp"/>
+        &lt;!&ndash; 表示匿名用户可以访问 &ndash;&gt;
+        &lt;!&ndash;<security:intercept-url pattern="/login.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY"/>&ndash;&gt;
+        &lt;!&ndash;所有的用户都要有user权限&ndash;&gt;
+        <security:intercept-url pattern="/**" access="ROLE_USER"/>
+    </security:http>
+    &lt;!&ndash; 认证成功后的处理类 &ndash;&gt;
+    <bean id="authSuccess" class="AuthenticationSuccessHandlerImpl"/>
+
+   &lt;!&ndash; <security:http auto-config="true">
+        <security:intercept-url pattern="/**" access="ROLE_USER"/>
+    </security:http>&ndash;&gt;
+
+    <security:authentication-manager >
+        <security:authentication-provider>
+            <security:user-service>
+                <security:user name="user" password="user" authorities="ROLE_USER"/>
+                <security:user name="admin" password="admin" authorities="ROLE_USER, ROLE_ADMIN"/>
+            </security:user-service>
+        </security:authentication-provider>
+    </security:authentication-manager>-->
+
+
+                                            <!--复杂配置二-->
+
+    <!--<security:http auto-config="true">
+        <security:form-login login-page="/login.jsp" login-processing-url="/login.do"
+                             username-parameter="username" password-parameter="password"
+                             authentication-success-handler-ref="authSuccess"
+                             authentication-failure-url="/failure.jsp"/>
+
+        <security:intercept-url pattern="/**" access="ROLE_USER"/>
+    </security:http>
+
+    <bean id="authSuccess" class="com.security.AuthenticationSuccessHandlerImpl"/>
+
+
+    <security:authentication-manager  alias="authenticationManager">
+        <security:authentication-provider user-service-ref="userDetailService">
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <bean id="userDetailService" class="com.security.UserDetailServiceImpl"/>-->
+
+
+        <!--复杂配置三-->
+    <security:http auto-config="true" >
+        <security:form-login login-page="/login.jsp" login-processing-url="/login.do"
+                             username-parameter="username" password-parameter="password"
+                             authentication-success-handler-ref="authSuccess"
+                             authentication-failure-url="/failure.jsp"/>
+
+        <!-- 重写登陆认证的过滤器，使我们可以拿到任何参数 -->
+        <security:custom-filter ref="myAuthenticationFilter" position="FORM_LOGIN_FILTER" />
+
+        <!--最大登录数为一-->
+      <!--  <security:session-management>
+            <security:concurrency-control max-sessions="1"
+                                 error-if-maximum-exceeded="false" />
+        </security:session-management>-->
+
+        <security:intercept-url pattern="/**" access="ROLE_USER"/>
+        <!-- 登出管理 -->
+        <!--<security:logout invalidate-session="true" logout-url="/j_spring_security_logout" />-->
+    </security:http>
+
+    <!-- 登录验证器：用户有没有登录的资格 --><!-- 这个就是重写的认证过滤器 -->
+    <bean id="myAuthenticationFilter" class="com.security.MyAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="filterProcessesUrl" value="/login.do" /><!--这里-->
+    </bean>
+
+
+
+
+
+    <bean id="authSuccess" class="com.security.AuthenticationSuccessHandlerImpl"/>
+
+
+    <security:authentication-manager  alias="authenticationManager">
+        <security:authentication-provider user-service-ref="userDetailService">
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <bean id="userDetailService" class="com.security.UserDetailServiceImpl"/>
+</beans>
