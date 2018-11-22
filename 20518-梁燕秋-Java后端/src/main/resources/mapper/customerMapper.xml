@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mappers.CustomerMapper">
+    <insert id="addCustomer" keyProperty="customer_id " useGeneratedKeys="true" parameterType="com.entity.Customer">
+        INSERT INTO customer(store_id,first_name,last_name,email,address_id,active,create_date,last_update)
+        VALUES(#{store_id},#{first_name},#{last_name},#{email},#{address_id},#{active},#{create_date},#{last_update})
+    </insert>
+    <update id="updateCustomer" parameterType="com.entity.Customer">
+        UPDATE customer SET
+            last_name=#{last_name},
+            email=#{email},
+            address_id=#{address_id},
+            last_update=#{last_update}
+        where customer_id=#{customer_id}
+    </update>
+    <delete id="deleteCustomer" parameterType="int">
+        DELETE FROM payment where customer_id=#{customer_id};
+        delete from rental where customer_id=#{customer_id};
+        DELETE FROM customer WHERE customer_id=#{customer_id}
+    </delete>
+
+     <select id="queryByName" resultType="com.entity.Customer" parameterType="string">
+        select * FROM customer where first_name=#{first_name}
+    </select>
+    <select id="queryAll" resultType="com.entity.Customer">
+        SELECT customer_id,first_name,last_name,email,address,customer.last_update
+        from customer left JOIN address ON customer.address_id=address.address_id
+    </select>
+    <select id="queryById" resultType="com.entity.Customer">
+        SELECT  * from customer where customer_id=#{customer_id}
+    </select>
+</mapper>

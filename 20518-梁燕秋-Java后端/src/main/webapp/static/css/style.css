@@ -1,0 +1,10 @@
+body{
+    background: url("http://img.netbian.com/file/2017/0302/c27b5cb8d44b0c42e8b45e17d122c511.jpg") no-repeat;
+    background-size:100%;
+
+}
+.form{background: rgba(255,255,255,0.2);width:400px;margin:120px auto;}
+/*阴影*/
+.fa{display: inline-block;top: 27px;left: 6px;position: relative;color: #ccc;}
+input[type="text"],input[type="password"]{padding-left:26px;}
+.checkbox{padding-left:21px;}
